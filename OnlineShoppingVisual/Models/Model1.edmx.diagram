@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="37e7ea14c07c4b33af18512b18f4175e" Name="Diagram1">
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Admin_Details" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Cart" Width="1.5" PointX="3" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Cart_Details" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Category" Width="1.5" PointX="0.75" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Customer" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.OrderDetail" Width="1.5" PointX="7.5" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Product" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.Retailer" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.WishList" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.WishList_items" Width="1.5" PointX="8.25" PointY="2.875" IsExpanded="true" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart__Customer_I__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart_Deta__Cart___3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart_Deta__Produ__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__OrderDeta__Cart___403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__Product__Categor__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList__Custom__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__Product__Retaile__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___Produ__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___WishL__46E78A0C" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
