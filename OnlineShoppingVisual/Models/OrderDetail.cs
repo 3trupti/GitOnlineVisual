@@ -14,12 +14,15 @@ namespace OnlineShoppingVisual.Models
     
     public partial class OrderDetail
     {
-        public int Id { get; set; }
-        public string Order_Id { get; set; }
+        public int Order_Id { get; set; }
         public Nullable<int> Cart_Details_Id { get; set; }
+        public int Cart_Id { get; set; }
+        public int Product_Id { get; set; }
         public System.DateTime Order_Date { get; set; }
         public string Payment_Mode { get; set; }
     
+        public virtual Cart Cart { get; set; }
         public virtual Cart_Details Cart_Details { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

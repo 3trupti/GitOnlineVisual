@@ -17,12 +17,13 @@ namespace OnlineShoppingVisual.Models
         public Product()
         {
             this.Cart_Details = new HashSet<Cart_Details>();
+            this.OrderDetails = new HashSet<OrderDetail>();
             this.WishList_items = new HashSet<WishList_items>();
         }
     
         public int Product_Id { get; set; }
         public string Product_BrandName { get; set; }
-        public byte[] Product_Image { get; set; }
+        public string Product_Image { get; set; }
         public string Product_Description { get; set; }
         public string Category_Id { get; set; }
         public Nullable<int> Retailer_ID { get; set; }
@@ -31,6 +32,7 @@ namespace OnlineShoppingVisual.Models
     
         public virtual ICollection<Cart_Details> Cart_Details { get; set; }
         public virtual Category Category { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual Retailer Retailer { get; set; }
         public virtual ICollection<WishList_items> WishList_items { get; set; }
     }

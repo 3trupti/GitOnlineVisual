@@ -17,6 +17,7 @@ namespace OnlineShoppingVisual.Models
         public Cart()
         {
             this.Cart_Details = new HashSet<Cart_Details>();
+            this.OrderDetails = new HashSet<OrderDetail>();
         }
     
         public int Cart_Id { get; set; }
@@ -24,5 +25,6 @@ namespace OnlineShoppingVisual.Models
     
         public virtual Customer Customer { get; set; }
         public virtual ICollection<Cart_Details> Cart_Details { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
