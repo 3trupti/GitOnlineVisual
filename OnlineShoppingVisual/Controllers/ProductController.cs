@@ -11,7 +11,7 @@ using OnlineShoppingVisual.Models;
 namespace OnlineShoppingVisual.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [Route("api/UserApi")]
+    [Route("api/User")]
     public class ProductController : ApiController
     {
         Online_ShoppingDBEntities11 db = new Online_ShoppingDBEntities11();
@@ -251,16 +251,16 @@ namespace OnlineShoppingVisual.Controllers
 
         //sort product by price
 
-        [Route("api/User/SortByProductPrice/{price}")]
+        [Route("api/User/SortByProductPrice/{price}/{cname}")]
         [HttpGet]
-        public IQueryable<ProdRetailCatModel> FilterByPrice([FromUri] int price)
+        public IQueryable<ProdRetailCatModel> FilterByPrice([FromUri] int price, string cname)
         {
             try
             {
                 var data = from r in db.Retailers
                            join p in db.Products on r.Retailer_ID equals p.Retailer_ID
                            join c in db.Categories on p.Category_Id equals c.Category_ID
-                           where p.Product_Price < price
+                           where p.Product_Price < price && c.Category_Name == cname
                            select new ProdRetailCatModel
                            {
                                Product_Id = p.Product_Id,
@@ -319,6 +319,79 @@ namespace OnlineShoppingVisual.Controllers
                 throw ex;
             }
         }
+
+        //Sort By price and name
+        [Route("api/User/SortByPrice/{cname}")]
+        [HttpGet]
+        public IQueryable<ProdRetailCatModel> Sort_Price([FromUri] string cname)
+        {
+            try
+            {
+                var data = from r in db.Retailers
+                           join p in db.Products on r.Retailer_ID equals p.Retailer_ID
+                           join c in db.Categories on p.Category_Id equals c.Category_ID
+                           where c.Category_Name == cname
+                           orderby p.Product_Price
+                           select new ProdRetailCatModel
+                           {
+                               Product_Id = p.Product_Id,
+                               Product_BrandName = p.Product_BrandName,
+                               Product_Image = p.Product_Image,
+                               Product_Description = p.Product_Description,
+                               Category_Id = p.Category_Id,
+                               Retailer_ID = (int)p.Retailer_ID,
+                               Product_Price = p.Product_Price,
+                               Product_Quantity = (int)p.Product_Ouantity
+                           };
+
+                // var data = db.Products.Where(x => x.Product_Id == id);
+                if (data == null)
+                    throw new Exception("No Products Match the given ID");
+                else
+                    return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Route("api/User/SortByName/{cname}")]
+        [HttpGet]
+        public IQueryable<ProdRetailCatModel> Sort_Name([FromUri] string cname)
+        {
+            try
+            {
+                var data = from r in db.Retailers
+                           join p in db.Products on r.Retailer_ID equals p.Retailer_ID
+                           join c in db.Categories on p.Category_Id equals c.Category_ID
+                           where c.Category_Name == cname
+                           orderby p.Product_BrandName
+                           select new ProdRetailCatModel
+                           {
+                               Product_Id = p.Product_Id,
+                               Product_BrandName = p.Product_BrandName,
+                               Product_Image = p.Product_Image,
+                               Product_Description = p.Product_Description,
+                               Category_Id = p.Category_Id,
+                               Retailer_ID = (int)p.Retailer_ID,
+                               Product_Price = p.Product_Price,
+                               Product_Quantity = (int)p.Product_Ouantity
+                           };
+
+                // var data = db.Products.Where(x => x.Product_Id == id);
+                if (data == null)
+                    throw new Exception("No Products Match the given ID");
+                else
+                    return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
 
 
 

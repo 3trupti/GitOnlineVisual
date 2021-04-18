@@ -23,13 +23,13 @@ namespace OnlineShoppingVisual.Controllers
         
         public string AddOrderDetails(int id)
         {
-            
-                Cart_Details cartD = new Cart_Details();
+
+            /*    Cart_Details cartD = new Cart_Details();
                 Customer cus = new Customer();
                 Product prod = new Product();
                 int cd = (from c in db.Carts
                           join cu in db.Customers on c.Customer_ID equals cu.Customer_ID
-                          where cu.Customer_Email == email
+                          where cu.Customer_Email == id
                           select c.Cart_Id).SingleOrDefault();
                 int pri = (from p in db.Products
                            where p.Product_Id == id
@@ -91,10 +91,12 @@ namespace OnlineShoppingVisual.Controllers
 
 
 
-
-
-            }
-
+            */
+            return "to";
 
         }
+
+
+
+    }
 }

@@ -139,6 +139,22 @@ namespace OnlineShoppingVisual.Controllers
             return result;
 
         }
+        [Route("api/UserApi/GetCartID/{email}/")]
+
+        //Get Cart Id
+
+        [HttpGet]
+        public int GetCartID([FromUri ]string email)
+        {
+            var data = (from c in db.Customers
+                        join cr in db.Carts on c.Customer_ID equals cr.Customer_ID
+                        where c.Customer_Email == email
+                        select cr.Cart_Id).SingleOrDefault();
+
+               return data;
+
+        }
+
 
         //Pratiksha AddProducts part
         [Route("api/UserApi/AddProduct")]
