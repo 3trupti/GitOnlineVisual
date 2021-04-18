@@ -14,7 +14,7 @@ namespace OnlineShoppingVisual.Models
     
     public partial class Admin_Details
     {
-        public string Admin_ID { get; set; }
+        public int Admin_ID { get; set; }
         public string Admin_Name { get; set; }
         public string Admin_Email { get; set; }
         public string Admin_Contact { get; set; }

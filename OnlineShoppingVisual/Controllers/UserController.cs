@@ -17,7 +17,7 @@ namespace OnlineShoppingVisual.Controllers
     [Route("api/UserApi")]
     public class UserController : ApiController
     {
-        Online_ShoppingDBEntities7 db = new Online_ShoppingDBEntities7();
+        Online_ShoppingDBEntities11 db = new Online_ShoppingDBEntities11();
 
 
         [Route("api/UserApi/InsertCustomer")]
@@ -28,7 +28,7 @@ namespace OnlineShoppingVisual.Controllers
             Cart car = new Cart();
             WishList Wish = new WishList();
             car.Customer_ID = cus.Customer_ID;
-            Wish.Customer_ID=cus.Customer_ID;
+            Wish.Customer_ID = cus.Customer_ID;
             try
             {
 
@@ -93,16 +93,11 @@ namespace OnlineShoppingVisual.Controllers
 
         }
 
-        [Route("api/UserApi/Login/AdminHome")]
-        [HttpGet]
-        public void Adminhome()
-        {
 
-        }
 
-        [Route("api/UserApi/Login/{name}/{pwd}")]
+        [Route("api/UserApi/Login/{email}/{pwd}")]
         [HttpGet]
-        public string Get(string name, string pwd)
+        public string Get(string email, string pwd)
         {
             string result = "";
 
@@ -110,9 +105,9 @@ namespace OnlineShoppingVisual.Controllers
             {
 
 
-                var data = db.Customers.Where(x => x.Customer_Name == name && x.Customer_Password == pwd);
-                var data2 = db.Retailers.Where(x => x.Retailer_Name == name && x.Retailer_Password == pwd);
-                var data3 = db.Admin_Details.Where(x => x.Admin_Name == name && x.Admin_Password == pwd);
+                var data = db.Customers.Where(x => x.Customer_Email == email && x.Customer_Password == pwd);
+                var data2 = db.Retailers.Where(x => x.Retailer_Email == email && x.Retailer_Password == pwd);
+                var data3 = db.Admin_Details.Where(x => x.Admin_Email == email && x.Admin_Password == pwd);
                 if (data.Count() == 0 && data2.Count() == 0 && data3.Count() == 0)
                 {
                     result = "Invalid Credentials";
@@ -145,12 +140,94 @@ namespace OnlineShoppingVisual.Controllers
 
         }
 
-        [Route("api/UserApi/GetAllProducts")]
+        //Pratiksha AddProducts part
+        [Route("api/UserApi/AddProduct")]
+        [HttpPost]
+        public bool Post([FromBody] Product prod)
+        {
+            var string1 = prod.Product_Image;
+
+            //  string1.Replace("C:\fakepath\","D:\apisample\src\assets\images\");
+            var st2 = string1.Remove(0, 12);
+            prod.Product_Image = st2;
+
+            try
+            {
+                db.Products.Add(prod);
+                var res = db.SaveChanges();
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+        /*[Route("api/UserApi/GetAllProducts")]
         [HttpGet]
         public IEnumerable<Product> Get()
         {
             return db.Products.ToList();
+        }*/
+
+
+        ////////////////Viswa Admin profile
+
+        [Route("api/UserApi/AdminHome")]
+        [HttpGet]
+        ////////Method for retrieving data from Retailer table
+        public IEnumerable<Retailer> Get()
+        {
+            try
+            {
+                /* var data = from e in db.Retailers
+                            select new Retailer { Retailer_ID = e.Retailer_ID, Retailer_Name = e.Retailer_Name, 
+                                Retailer_ContactNo = e.Retailer_ContactNo, Retailer_Address = e.Retailer_Address, Retailer_Country = e.Retailer_Country, Retailer_State = e.Retailer_State, Retailer_City = e.Retailer_City, Retailer_PostalCode = e.Retailer_PostalCode, Retailer_Email = e.Retailer_Email, Retailer_Password = e.Retailer_Password };*/
+
+
+                return db.Retailers.ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
+
+        //Code to delete Retailer for row wise by admin
+        [Route("api/UserApi/DeleteRetailer/{id}")]
+        [HttpDelete]
+        public bool Delete([FromUri] int id)
+        {
+            try
+            {
+                var del = db.Retailers.Where(X => X.Retailer_ID == id).SingleOrDefault();
+                if (del == null)
+                {
+                    throw new Exception("Invalid Data");
+                }
+                else
+                {
+                    db.Retailers.Remove(del);
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                        return true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return false;
+        }
+
+
+
+        
+         
+
+
 
     }
 }

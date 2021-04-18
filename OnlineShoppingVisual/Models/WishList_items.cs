@@ -17,7 +17,9 @@ namespace OnlineShoppingVisual.Models
         public int WishList_items_Id { get; set; }
         public Nullable<int> WishList_ID { get; set; }
         public int Product_Id { get; set; }
-        public int Quantity { get; set; }
+        public string Product_Image { get; set; }
+        public string Product_Desc { get; set; }
+        public Nullable<int> Product_Price { get; set; }
     
         public virtual Product Product { get; set; }
         public virtual WishList WishList { get; set; }

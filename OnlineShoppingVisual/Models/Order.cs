@@ -12,17 +12,17 @@ namespace OnlineShoppingVisual.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderDetail
+    public partial class Order
     {
-        public int Order_Id { get; set; }
-        public Nullable<int> Cart_Details_Id { get; set; }
+        public int Ordered_ID { get; set; }
         public int Cart_Id { get; set; }
         public int Product_Id { get; set; }
-        public System.DateTime Order_Date { get; set; }
-        public string Payment_Mode { get; set; }
+        public string Product_Image { get; set; }
+        public Nullable<int> Product_Price { get; set; }
+        public Nullable<int> Product_Quantity { get; set; }
+        public Nullable<int> Total_Price { get; set; }
     
         public virtual Cart Cart { get; set; }
-        public virtual Cart_Details Cart_Details { get; set; }
         public virtual Product Product { get; set; }
     }
 }

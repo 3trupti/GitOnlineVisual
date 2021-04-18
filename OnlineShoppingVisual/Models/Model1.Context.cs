@@ -13,10 +13,10 @@ namespace OnlineShoppingVisual.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Online_ShoppingDBEntities7 : DbContext
+    public partial class Online_ShoppingDBEntities11 : DbContext
     {
-        public Online_ShoppingDBEntities7()
-            : base("name=Online_ShoppingDBEntities7")
+        public Online_ShoppingDBEntities11()
+            : base("name=Online_ShoppingDBEntities11")
         {
         }
     
@@ -30,7 +30,7 @@ namespace OnlineShoppingVisual.Models
         public DbSet<Cart_Details> Cart_Details { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Retailer> Retailers { get; set; }
         public DbSet<WishList> WishLists { get; set; }

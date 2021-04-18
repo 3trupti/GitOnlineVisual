@@ -14,20 +14,15 @@ namespace OnlineShoppingVisual.Models
     
     public partial class Cart_Details
     {
-        public Cart_Details()
-        {
-            this.OrderDetails = new HashSet<OrderDetail>();
-        }
-    
         public int Cart_Details_Id { get; set; }
         public int Cart_Id { get; set; }
         public int Product_Id { get; set; }
+        public string Product_Image { get; set; }
         public Nullable<int> Product_Price { get; set; }
         public int Product_Quantity { get; set; }
         public Nullable<int> Total_Order_Amount { get; set; }
     
         public virtual Cart Cart { get; set; }
         public virtual Product Product { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

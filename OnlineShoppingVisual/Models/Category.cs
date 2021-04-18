@@ -21,7 +21,6 @@ namespace OnlineShoppingVisual.Models
     
         public string Category_ID { get; set; }
         public string Category_Name { get; set; }
-        public string SubCategory_Name { get; set; }
     
         public virtual ICollection<Product> Products { get; set; }
     }

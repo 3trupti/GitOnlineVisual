@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="Admin_ID" />
           </Key>
-          <Property Name="Admin_ID" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Admin_ID" Type="int" Nullable="false" />
           <Property Name="Admin_Name" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="Admin_Email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Admin_Contact" Type="varchar" MaxLength="10" Nullable="false" />
@@ -29,6 +29,7 @@
           <Property Name="Cart_Details_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Cart_Id" Type="int" Nullable="false" />
           <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Product_Image" Type="varchar(max)" />
           <Property Name="Product_Price" Type="int" />
           <Property Name="Product_Quantity" Type="int" Nullable="false" />
           <Property Name="Total_Order_Amount" Type="int" StoreGeneratedPattern="Computed" />
@@ -39,7 +40,6 @@
           </Key>
           <Property Name="Category_ID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Category_Name" Type="varchar" MaxLength="40" />
-          <Property Name="SubCategory_Name" Type="varchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -57,16 +57,17 @@
           <Property Name="Customer_Password" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Customer_Type" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
-        <EntityType Name="OrderDetails">
+        <EntityType Name="Orders">
           <Key>
-            <PropertyRef Name="Order_Id" />
+            <PropertyRef Name="Ordered_ID" />
           </Key>
-          <Property Name="Order_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Cart_Details_Id" Type="int" />
+          <Property Name="Ordered_ID" Type="int" Nullable="false" />
           <Property Name="Cart_Id" Type="int" Nullable="false" />
           <Property Name="Product_Id" Type="int" Nullable="false" />
-          <Property Name="Order_Date" Type="date" Nullable="false" />
-          <Property Name="Payment_Mode" Type="varchar" MaxLength="30" />
+          <Property Name="Product_Image" Type="varchar" MaxLength="150" />
+          <Property Name="Product_Price" Type="int" />
+          <Property Name="Product_Quantity" Type="int" />
+          <Property Name="Total_Price" Type="int" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -111,7 +112,9 @@
           <Property Name="WishList_items_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WishList_ID" Type="int" />
           <Property Name="Product_Id" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Product_Image" Type="varchar(max)" />
+          <Property Name="Product_Desc" Type="varchar(max)" />
+          <Property Name="Product_Price" Type="int" />
         </EntityType>
         <Association Name="FK__Cart__Customer_I__31EC6D26">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1">
@@ -155,38 +158,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Cart___4AB81AF0">
-          <End Role="Cart_Details" Type="Self.Cart_Details" Multiplicity="0..1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cart_Details">
-              <PropertyRef Name="Cart_Details_Id" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="Cart_Details_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__OrderDeta__Cart___4BAC3F29">
+        <Association Name="FK__Orders__Cart_Id__45F365D3">
           <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cart">
               <PropertyRef Name="Cart_Id" />
             </Principal>
-            <Dependent Role="OrderDetails">
+            <Dependent Role="Orders">
               <PropertyRef Name="Cart_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Produ__4CA06362">
+        <Association Name="FK__Orders__Product___46E78A0C">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="Product_Id" />
             </Principal>
-            <Dependent Role="OrderDetails">
+            <Dependent Role="Orders">
               <PropertyRef Name="Product_Id" />
             </Dependent>
           </ReferentialConstraint>
@@ -219,7 +210,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList___Produ__47DBAE45">
+        <Association Name="FK__WishList___Produ__4316F928">
           <End Role="Product" Type="Self.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -233,7 +224,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList___WishL__46E78A0C">
+        <Association Name="FK__WishList___WishL__4222D4EF">
           <End Role="WishList" Type="Self.WishList" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -247,7 +238,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList__Custom__440B1D61">
+        <Association Name="FK__WishList__Custom__3F466844">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -267,7 +258,7 @@
           <EntitySet Name="Cart_Details" EntityType="Self.Cart_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Retailer" EntityType="Self.Retailer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WishList" EntityType="Self.WishList" Schema="dbo" store:Type="Tables" />
@@ -284,17 +275,13 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="Cart_Details" EntitySet="Cart_Details" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Cart___4AB81AF0" Association="Self.FK__OrderDeta__Cart___4AB81AF0">
-            <End Role="Cart_Details" EntitySet="Cart_Details" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Cart___4BAC3F29" Association="Self.FK__OrderDeta__Cart___4BAC3F29">
+          <AssociationSet Name="FK__Orders__Cart_Id__45F365D3" Association="Self.FK__Orders__Cart_Id__45F365D3">
             <End Role="Cart" EntitySet="Cart" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Produ__4CA06362" Association="Self.FK__OrderDeta__Produ__4CA06362">
+          <AssociationSet Name="FK__Orders__Product___46E78A0C" Association="Self.FK__Orders__Product___46E78A0C">
             <End Role="Product" EntitySet="Product" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK__Product__Categor__2E1BDC42" Association="Self.FK__Product__Categor__2E1BDC42">
             <End Role="Category" EntitySet="Category" />
@@ -304,15 +291,15 @@
             <End Role="Retailer" EntitySet="Retailer" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList___Produ__47DBAE45" Association="Self.FK__WishList___Produ__47DBAE45">
+          <AssociationSet Name="FK__WishList___Produ__4316F928" Association="Self.FK__WishList___Produ__4316F928">
             <End Role="Product" EntitySet="Product" />
             <End Role="WishList_items" EntitySet="WishList_items" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList___WishL__46E78A0C" Association="Self.FK__WishList___WishL__46E78A0C">
+          <AssociationSet Name="FK__WishList___WishL__4222D4EF" Association="Self.FK__WishList___WishL__4222D4EF">
             <End Role="WishList" EntitySet="WishList" />
             <End Role="WishList_items" EntitySet="WishList_items" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList__Custom__440B1D61" Association="Self.FK__WishList__Custom__440B1D61">
+          <AssociationSet Name="FK__WishList__Custom__3F466844" Association="Self.FK__WishList__Custom__3F466844">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="WishList" EntitySet="WishList" />
           </AssociationSet>
@@ -326,7 +313,7 @@
           <Key>
             <PropertyRef Name="Admin_ID" />
           </Key>
-          <Property Name="Admin_ID" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Admin_ID" Type="Int32" Nullable="false" />
           <Property Name="Admin_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Admin_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Admin_Contact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
@@ -340,7 +327,7 @@
           <Property Name="Customer_ID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="Self.FK__Cart__Customer_I__31EC6D26" FromRole="Cart" ToRole="Customer" />
           <NavigationProperty Name="Cart_Details" Relationship="Self.FK__Cart_Deta__Cart___34C8D9D1" FromRole="Cart" ToRole="Cart_Details" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Cart___4BAC3F29" FromRole="Cart" ToRole="OrderDetails" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Cart_Id__45F365D3" FromRole="Cart" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Cart_Details">
           <Key>
@@ -349,12 +336,12 @@
           <Property Name="Cart_Details_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Cart_Id" Type="Int32" Nullable="false" />
           <Property Name="Product_Id" Type="Int32" Nullable="false" />
+          <Property Name="Product_Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Product_Price" Type="Int32" />
           <Property Name="Product_Quantity" Type="Int32" Nullable="false" />
           <Property Name="Total_Order_Amount" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Cart" Relationship="Self.FK__Cart_Deta__Cart___34C8D9D1" FromRole="Cart_Details" ToRole="Cart" />
           <NavigationProperty Name="Product" Relationship="Self.FK__Cart_Deta__Produ__35BCFE0A" FromRole="Cart_Details" ToRole="Product" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Cart___4AB81AF0" FromRole="Cart_Details" ToRole="OrderDetails" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -362,7 +349,6 @@
           </Key>
           <Property Name="Category_ID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Category_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="SubCategory_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK__Product__Categor__2E1BDC42" FromRole="Category" ToRole="Product" />
         </EntityType>
         <EntityType Name="Customer">
@@ -381,21 +367,21 @@
           <Property Name="Customer_Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Customer_Type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Carts" Relationship="Self.FK__Cart__Customer_I__31EC6D26" FromRole="Customer" ToRole="Cart" />
-          <NavigationProperty Name="WishLists" Relationship="Self.FK__WishList__Custom__440B1D61" FromRole="Customer" ToRole="WishList" />
+          <NavigationProperty Name="WishLists" Relationship="Self.FK__WishList__Custom__3F466844" FromRole="Customer" ToRole="WishList" />
         </EntityType>
-        <EntityType Name="OrderDetail">
+        <EntityType Name="Order">
           <Key>
-            <PropertyRef Name="Order_Id" />
+            <PropertyRef Name="Ordered_ID" />
           </Key>
-          <Property Name="Order_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Cart_Details_Id" Type="Int32" />
+          <Property Name="Ordered_ID" Type="Int32" Nullable="false" />
           <Property Name="Cart_Id" Type="Int32" Nullable="false" />
           <Property Name="Product_Id" Type="Int32" Nullable="false" />
-          <Property Name="Order_Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Payment_Mode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Cart" Relationship="Self.FK__OrderDeta__Cart___4BAC3F29" FromRole="OrderDetails" ToRole="Cart" />
-          <NavigationProperty Name="Cart_Details" Relationship="Self.FK__OrderDeta__Cart___4AB81AF0" FromRole="OrderDetails" ToRole="Cart_Details" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__OrderDeta__Produ__4CA06362" FromRole="OrderDetails" ToRole="Product" />
+          <Property Name="Product_Image" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Price" Type="Int32" />
+          <Property Name="Product_Quantity" Type="Int32" />
+          <Property Name="Total_Price" Type="Int32" />
+          <NavigationProperty Name="Cart" Relationship="Self.FK__Orders__Cart_Id__45F365D3" FromRole="Orders" ToRole="Cart" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Orders__Product___46E78A0C" FromRole="Orders" ToRole="Product" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -411,9 +397,9 @@
           <Property Name="Product_Ouantity" Type="Int32" />
           <NavigationProperty Name="Cart_Details" Relationship="Self.FK__Cart_Deta__Produ__35BCFE0A" FromRole="Product" ToRole="Cart_Details" />
           <NavigationProperty Name="Category" Relationship="Self.FK__Product__Categor__2E1BDC42" FromRole="Product" ToRole="Category" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__4CA06362" FromRole="Product" ToRole="OrderDetails" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Product___46E78A0C" FromRole="Product" ToRole="Orders" />
           <NavigationProperty Name="Retailer" Relationship="Self.FK__Product__Retaile__2F10007B" FromRole="Product" ToRole="Retailer" />
-          <NavigationProperty Name="WishList_items" Relationship="Self.FK__WishList___Produ__47DBAE45" FromRole="Product" ToRole="WishList_items" />
+          <NavigationProperty Name="WishList_items" Relationship="Self.FK__WishList___Produ__4316F928" FromRole="Product" ToRole="WishList_items" />
         </EntityType>
         <EntityType Name="Retailer">
           <Key>
@@ -438,8 +424,8 @@
           </Key>
           <Property Name="WishList_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Customer_ID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK__WishList__Custom__440B1D61" FromRole="WishList" ToRole="Customer" />
-          <NavigationProperty Name="WishList_items" Relationship="Self.FK__WishList___WishL__46E78A0C" FromRole="WishList" ToRole="WishList_items" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__WishList__Custom__3F466844" FromRole="WishList" ToRole="Customer" />
+          <NavigationProperty Name="WishList_items" Relationship="Self.FK__WishList___WishL__4222D4EF" FromRole="WishList" ToRole="WishList_items" />
         </EntityType>
         <EntityType Name="WishList_items">
           <Key>
@@ -448,9 +434,11 @@
           <Property Name="WishList_items_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WishList_ID" Type="Int32" />
           <Property Name="Product_Id" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__WishList___Produ__47DBAE45" FromRole="WishList_items" ToRole="Product" />
-          <NavigationProperty Name="WishList" Relationship="Self.FK__WishList___WishL__46E78A0C" FromRole="WishList_items" ToRole="WishList" />
+          <Property Name="Product_Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Price" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__WishList___Produ__4316F928" FromRole="WishList_items" ToRole="Product" />
+          <NavigationProperty Name="WishList" Relationship="Self.FK__WishList___WishL__4222D4EF" FromRole="WishList_items" ToRole="WishList" />
         </EntityType>
         <Association Name="FK__Cart__Customer_I__31EC6D26">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1">
@@ -480,14 +468,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Cart___4BAC3F29">
+        <Association Name="FK__Orders__Cart_Id__45F365D3">
           <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cart">
               <PropertyRef Name="Cart_Id" />
             </Principal>
-            <Dependent Role="OrderDetails">
+            <Dependent Role="Orders">
               <PropertyRef Name="Cart_Id" />
             </Dependent>
           </ReferentialConstraint>
@@ -506,18 +494,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Cart___4AB81AF0">
-          <End Role="Cart_Details" Type="Self.Cart_Details" Multiplicity="0..1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cart_Details">
-              <PropertyRef Name="Cart_Details_Id" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="Cart_Details_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Product__Categor__2E1BDC42">
           <End Role="Category" Type="Self.Category" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -532,7 +508,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList__Custom__440B1D61">
+        <Association Name="FK__WishList__Custom__3F466844">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -546,14 +522,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Produ__4CA06362">
+        <Association Name="FK__Orders__Product___46E78A0C">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="Product_Id" />
             </Principal>
-            <Dependent Role="OrderDetails">
+            <Dependent Role="Orders">
               <PropertyRef Name="Product_Id" />
             </Dependent>
           </ReferentialConstraint>
@@ -572,7 +548,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList___Produ__47DBAE45">
+        <Association Name="FK__WishList___Produ__4316F928">
           <End Role="Product" Type="Self.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -586,7 +562,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__WishList___WishL__46E78A0C">
+        <Association Name="FK__WishList___WishL__4222D4EF">
           <End Role="WishList" Type="Self.WishList" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -600,13 +576,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Online_ShoppingDBEntities7" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Online_ShoppingDBEntities11" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admin_Details" EntityType="Self.Admin_Details" />
           <EntitySet Name="Carts" EntityType="Self.Cart" />
           <EntitySet Name="Cart_Details" EntityType="Self.Cart_Details" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="Retailers" EntityType="Self.Retailer" />
           <EntitySet Name="WishLists" EntityType="Self.WishList" />
@@ -619,39 +595,35 @@
             <End Role="Cart" EntitySet="Carts" />
             <End Role="Cart_Details" EntitySet="Cart_Details" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Cart___4BAC3F29" Association="Self.FK__OrderDeta__Cart___4BAC3F29">
+          <AssociationSet Name="FK__Orders__Cart_Id__45F365D3" Association="Self.FK__Orders__Cart_Id__45F365D3">
             <End Role="Cart" EntitySet="Carts" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK__Cart_Deta__Produ__35BCFE0A" Association="Self.FK__Cart_Deta__Produ__35BCFE0A">
             <End Role="Product" EntitySet="Products" />
             <End Role="Cart_Details" EntitySet="Cart_Details" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Cart___4AB81AF0" Association="Self.FK__OrderDeta__Cart___4AB81AF0">
-            <End Role="Cart_Details" EntitySet="Cart_Details" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
           <AssociationSet Name="FK__Product__Categor__2E1BDC42" Association="Self.FK__Product__Categor__2E1BDC42">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList__Custom__440B1D61" Association="Self.FK__WishList__Custom__440B1D61">
+          <AssociationSet Name="FK__WishList__Custom__3F466844" Association="Self.FK__WishList__Custom__3F466844">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="WishList" EntitySet="WishLists" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Produ__4CA06362" Association="Self.FK__OrderDeta__Produ__4CA06362">
+          <AssociationSet Name="FK__Orders__Product___46E78A0C" Association="Self.FK__Orders__Product___46E78A0C">
             <End Role="Product" EntitySet="Products" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK__Product__Retaile__2F10007B" Association="Self.FK__Product__Retaile__2F10007B">
             <End Role="Retailer" EntitySet="Retailers" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList___Produ__47DBAE45" Association="Self.FK__WishList___Produ__47DBAE45">
+          <AssociationSet Name="FK__WishList___Produ__4316F928" Association="Self.FK__WishList___Produ__4316F928">
             <End Role="Product" EntitySet="Products" />
             <End Role="WishList_items" EntitySet="WishList_items" />
           </AssociationSet>
-          <AssociationSet Name="FK__WishList___WishL__46E78A0C" Association="Self.FK__WishList___WishL__46E78A0C">
+          <AssociationSet Name="FK__WishList___WishL__4222D4EF" Association="Self.FK__WishList___WishL__4222D4EF">
             <End Role="WishList" EntitySet="WishLists" />
             <End Role="WishList_items" EntitySet="WishList_items" />
           </AssociationSet>
@@ -661,7 +633,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Online_ShoppingDBModelStoreContainer" CdmEntityContainer="Online_ShoppingDBEntities7">
+        <EntityContainerMapping StorageEntityContainer="Online_ShoppingDBModelStoreContainer" CdmEntityContainer="Online_ShoppingDBEntities11">
           <EntitySetMapping Name="Admin_Details">
             <EntityTypeMapping TypeName="Online_ShoppingDBModel.Admin_Details">
               <MappingFragment StoreEntitySet="Admin_Details">
@@ -687,6 +659,7 @@
                 <ScalarProperty Name="Cart_Details_Id" ColumnName="Cart_Details_Id" />
                 <ScalarProperty Name="Cart_Id" ColumnName="Cart_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Product_Image" ColumnName="Product_Image" />
                 <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
                 <ScalarProperty Name="Product_Quantity" ColumnName="Product_Quantity" />
                 <ScalarProperty Name="Total_Order_Amount" ColumnName="Total_Order_Amount" />
@@ -698,7 +671,6 @@
               <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="Category_ID" ColumnName="Category_ID" />
                 <ScalarProperty Name="Category_Name" ColumnName="Category_Name" />
-                <ScalarProperty Name="SubCategory_Name" ColumnName="SubCategory_Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -719,15 +691,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="Online_ShoppingDBModel.OrderDetail">
-              <MappingFragment StoreEntitySet="OrderDetails">
-                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
-                <ScalarProperty Name="Cart_Details_Id" ColumnName="Cart_Details_Id" />
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="Online_ShoppingDBModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Ordered_ID" ColumnName="Ordered_ID" />
                 <ScalarProperty Name="Cart_Id" ColumnName="Cart_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
-                <ScalarProperty Name="Order_Date" ColumnName="Order_Date" />
-                <ScalarProperty Name="Payment_Mode" ColumnName="Payment_Mode" />
+                <ScalarProperty Name="Product_Image" ColumnName="Product_Image" />
+                <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
+                <ScalarProperty Name="Product_Quantity" ColumnName="Product_Quantity" />
+                <ScalarProperty Name="Total_Price" ColumnName="Total_Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -776,7 +749,9 @@
                 <ScalarProperty Name="WishList_items_Id" ColumnName="WishList_items_Id" />
                 <ScalarProperty Name="WishList_ID" ColumnName="WishList_ID" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Product_Image" ColumnName="Product_Image" />
+                <ScalarProperty Name="Product_Desc" ColumnName="Product_Desc" />
+                <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
