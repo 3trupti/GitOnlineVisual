@@ -239,9 +239,71 @@ namespace OnlineShoppingVisual.Controllers
         }
 
 
+        [Route("api/UserApi/DeleteProduct/{id}")]
+        [HttpDelete]
 
-        
-         
+        public bool Product_Delete([FromUri] int id)    ////Name Changes in angular 
+        {
+            try
+            {
+                var del = db.Products.Where(x => x.Product_Id == id).SingleOrDefault();
+                if (del == null)
+                    throw new Exception("Id cannot be null ");
+                else
+                {
+                    db.Products.Remove(del);
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                        return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+
+        /////Update Product
+
+        [Route("api/UserApi/UpdateProduct/{id}")]
+        [HttpPut]
+        public bool Update(int id, [FromBody] Product newprod) //Name change from Put to Update //Angular changes
+        {
+            try
+            {
+                var string1 = newprod.Product_Image;
+
+                //  string1.Replace("C:\fakepath\","D:\apisample\src\assets\images\");
+                var st2 = string1.Remove(0, 12);
+                newprod.Product_Image = st2;
+                var olddata = db.Products.Where(x => x.Product_Id == id).SingleOrDefault();
+                if (olddata == null)
+                    throw new Exception("Invalid Input");
+                else
+                {
+                    olddata.Product_Id = newprod.Product_Id;
+                    olddata.Product_BrandName = newprod.Product_BrandName;
+                    olddata.Product_Image = newprod.Product_Image;
+                    olddata.Product_Description = newprod.Product_Description;
+                    olddata.Category_Id = newprod.Category_Id;
+                    olddata.Retailer_ID = newprod.Retailer_ID;
+                    olddata.Product_Price = newprod.Product_Price;
+                    olddata.Product_Ouantity = newprod.Product_Ouantity;
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                        return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+
 
 
 

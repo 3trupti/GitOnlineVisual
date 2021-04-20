@@ -118,12 +118,54 @@ namespace OnlineShoppingVisual.Controllers
            }
            return false;
          }*/
+
+        //retrieve product by product it
+        [Route("api/User/GetProductById/{id}")]
+
+        [HttpGet]
+        public ProdRetailCatModel GetProductById(int id)
+        {
+            try {
+                var data = (from r in db.Retailers
+                           join p in db.Products on r.Retailer_ID equals p.Retailer_ID
+                           join c in db.Categories on p.Category_Id equals c.Category_ID
+                           where p.Product_Id==id
+                           select new ProdRetailCatModel
+                           {
+                               Product_Id = p.Product_Id,
+                               Product_BrandName = p.Product_BrandName,
+                               Product_Image = p.Product_Image,
+                               Product_Description = p.Product_Description,
+                               Category_Id = p.Category_Id,
+                               Retailer_ID = (int)p.Retailer_ID,
+                               Product_Price = p.Product_Price,
+                               Product_Quantity = (int)(p.Product_Ouantity)
+                           }).SingleOrDefault();
+
+                return data;
+
+
+            }
+
+
+
+            catch (Exception ex){ throw ex; }
+
+        }
+
+
+        //update by product id
         [Route("api/User/UpdateProduct/{id}")]
         [HttpPut]
         public bool Update(int id, [FromBody] Product newprod) //Name change from Put to Update //Angular changes
         {
             try
             {
+                var string1 = newprod.Product_Image;
+
+                //  string1.Replace("C:\fakepath\","D:\apisample\src\assets\images\");
+                var st2 = string1.Remove(0, 12);
+                newprod.Product_Image = st2;
                 var olddata = db.Products.Where(x => x.Product_Id == id).SingleOrDefault();
                 if (olddata == null)
                     throw new Exception("Invalid Input");
@@ -154,7 +196,7 @@ namespace OnlineShoppingVisual.Controllers
         [Route("api/User/DeleteProduct/{id}")]
         [HttpDelete]
 
-        public bool Product_Delete(int id)    ////Name Changes in angular 
+        public bool Product_Delete([FromUri] int id)    ////Name Changes in angular 
         {
             try
             {
