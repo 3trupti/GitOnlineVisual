@@ -17,6 +17,7 @@ namespace OnlineShoppingVisual.Models
         public Retailer()
         {
             this.Products = new HashSet<Product>();
+            this.ProductAccepts = new HashSet<ProductAccept>();
         }
     
         public int Retailer_ID { get; set; }
@@ -32,5 +33,6 @@ namespace OnlineShoppingVisual.Models
         public string Customer_Type { get; set; }
     
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductAccept> ProductAccepts { get; set; }
     }
 }

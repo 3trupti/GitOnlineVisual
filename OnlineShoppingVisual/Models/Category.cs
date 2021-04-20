@@ -17,11 +17,13 @@ namespace OnlineShoppingVisual.Models
         public Category()
         {
             this.Products = new HashSet<Product>();
+            this.ProductAccepts = new HashSet<ProductAccept>();
         }
     
         public string Category_ID { get; set; }
         public string Category_Name { get; set; }
     
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductAccept> ProductAccepts { get; set; }
     }
 }

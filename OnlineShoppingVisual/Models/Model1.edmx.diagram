@@ -25,6 +25,9 @@
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Product__Retaile__2F10007B" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___Produ__4316F928" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___WishL__4222D4EF" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Online_ShoppingDBModel.ProductAccept" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__ProductAc__Categ__5165187F" />
+        <AssociationConnector Association="Online_ShoppingDBModel.FK__ProductAc__Retai__52593CB8" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

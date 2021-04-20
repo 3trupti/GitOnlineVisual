@@ -304,6 +304,139 @@ namespace OnlineShoppingVisual.Controllers
         }
 
 
+        //////new Product accept table
+        [Route("api/UserApi/ProductAccept")]
+        [HttpPost]
+        public bool PostP([FromBody] ProductAccept prod)
+        {
+            var string1 = prod.Product_Image;
+
+            //  string1.Replace("C:\fakepath\","D:\apisample\src\assets\images\");
+            var st2 = string1.Remove(0, 12);
+            prod.Product_Image = st2;
+
+
+
+            try
+            {
+                db.ProductAccepts.Add(prod);
+                var res = db.SaveChanges();
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+
+        ///get all products for admin to approve
+        [Route("api/UserApi/ProductGet")]
+        [HttpGet]
+        public IQueryable<ProdRetailCatModel> ProductGet()
+        //this get() method  retrieves all products from the table
+        {
+            try
+            {
+                var data = from r in db.Retailers
+                           join p in db.ProductAccepts on r.Retailer_ID equals p.Retailer_ID
+                           join c in db.Categories on p.Category_Id equals c.Category_ID
+                           select new ProdRetailCatModel
+                           {
+                               Product_Id = p.Prod,
+                               Product_BrandName = p.Product_BrandName,
+                               Product_Image = p.Product_Image,
+                               Product_Description = p.Product_Description,
+                               Category_Id = p.Category_Id,
+                               Retailer_ID = (int)p.Retailer_ID,
+                               Product_Price = p.Product_Price,
+                               Product_Quantity = (int)p.Product_Ouantity
+                           };
+
+
+
+                return data;
+
+                // return (IEnumerable<Product>)data;
+                //explicit typecasting
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        ////get product by id to approve
+        [Route("api/UserApi/ProdAcceptId/{id}")]
+
+        [HttpGet]
+        public ProdRetailCatModel ProdAcceptId([FromUri]int id)
+        {
+            try
+            {
+                var data = (from r in db.Retailers
+                            join p in db.ProductAccepts on r.Retailer_ID equals p.Retailer_ID
+                            join c in db.Categories on p.Category_Id equals c.Category_ID
+                            where p.Prod == id
+                            select new ProdRetailCatModel
+                            {
+                                Product_Id = p.Prod,
+                                Product_BrandName = p.Product_BrandName,
+                                Product_Image = p.Product_Image,
+                                Product_Description = p.Product_Description,
+                                Category_Id = p.Category_Id,
+                                Retailer_ID = (int)p.Retailer_ID,
+                                Product_Price = p.Product_Price,
+                                Product_Quantity = (int)(p.Product_Ouantity)
+                            }).SingleOrDefault();
+
+                return data;
+
+
+            }
+
+
+
+            catch (Exception ex) { throw ex; }
+
+        }
+
+        [Route("api/UserApi/AdminAddProduct")]
+        [HttpPost]
+        public bool PostP([FromBody] Product prod)
+        {
+           // var string1 = prod.Product_Image;
+
+            //  string1.Replace("C:\fakepath\","D:\apisample\src\assets\images\");
+            //var st2 = string1.Remove(0, 12);
+            //prod.Product_Image = st2;
+
+
+            
+
+            try
+            {
+                
+                db.Products.Add(prod);
+                var res = db.SaveChanges();
+                if (res > 0)
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return false;
+        }
+
+
+
+
+
 
 
 

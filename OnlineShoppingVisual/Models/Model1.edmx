@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Online_ShoppingDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Online_ShoppingDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin_Details">
           <Key>
             <PropertyRef Name="Admin_ID" />
@@ -74,6 +74,19 @@
             <PropertyRef Name="Product_Id" />
           </Key>
           <Property Name="Product_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Product_BrandName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Product_Image" Type="varchar(max)" Nullable="false" />
+          <Property Name="Product_Description" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Category_Id" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Retailer_ID" Type="int" />
+          <Property Name="Product_Price" Type="int" Nullable="false" />
+          <Property Name="Product_Ouantity" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductAccept">
+          <Key>
+            <PropertyRef Name="Prod" />
+          </Key>
+          <Property Name="Prod" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Product_BrandName" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="Product_Image" Type="varchar(max)" Nullable="false" />
           <Property Name="Product_Description" Type="varchar" MaxLength="100" Nullable="false" />
@@ -210,6 +223,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__ProductAc__Categ__5165187F">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductAccept" Type="Self.ProductAccept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Category_ID" />
+            </Principal>
+            <Dependent Role="ProductAccept">
+              <PropertyRef Name="Category_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductAc__Retai__52593CB8">
+          <End Role="Retailer" Type="Self.Retailer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductAccept" Type="Self.ProductAccept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Retailer">
+              <PropertyRef Name="Retailer_ID" />
+            </Principal>
+            <Dependent Role="ProductAccept">
+              <PropertyRef Name="Retailer_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__WishList___Produ__4316F928">
           <End Role="Product" Type="Self.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -260,6 +301,7 @@
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductAccept" EntityType="Self.ProductAccept" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Retailer" EntityType="Self.Retailer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WishList" EntityType="Self.WishList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WishList_items" EntityType="Self.WishList_items" Schema="dbo" store:Type="Tables" />
@@ -291,6 +333,14 @@
             <End Role="Retailer" EntitySet="Retailer" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
+          <AssociationSet Name="FK__ProductAc__Categ__5165187F" Association="Self.FK__ProductAc__Categ__5165187F">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="ProductAccept" EntitySet="ProductAccept" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductAc__Retai__52593CB8" Association="Self.FK__ProductAc__Retai__52593CB8">
+            <End Role="Retailer" EntitySet="Retailer" />
+            <End Role="ProductAccept" EntitySet="ProductAccept" />
+          </AssociationSet>
           <AssociationSet Name="FK__WishList___Produ__4316F928" Association="Self.FK__WishList___Produ__4316F928">
             <End Role="Product" EntitySet="Product" />
             <End Role="WishList_items" EntitySet="WishList_items" />
@@ -304,8 +354,7 @@
             <End Role="WishList" EntitySet="WishList" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Online_ShoppingDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -350,6 +399,7 @@
           <Property Name="Category_ID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Category_Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK__Product__Categor__2E1BDC42" FromRole="Category" ToRole="Product" />
+          <NavigationProperty Name="ProductAccepts" Relationship="Online_ShoppingDBModel.FK__ProductAc__Categ__5165187F" FromRole="Category" ToRole="ProductAccept" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -417,6 +467,7 @@
           <Property Name="Retailer_Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Customer_Type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK__Product__Retaile__2F10007B" FromRole="Retailer" ToRole="Product" />
+          <NavigationProperty Name="ProductAccepts" Relationship="Online_ShoppingDBModel.FK__ProductAc__Retai__52593CB8" FromRole="Retailer" ToRole="ProductAccept" />
         </EntityType>
         <EntityType Name="WishList">
           <Key>
@@ -627,8 +678,60 @@
             <End Role="WishList" EntitySet="WishLists" />
             <End Role="WishList_items" EntitySet="WishList_items" />
           </AssociationSet>
-        </EntityContainer>
-      </Schema>
+          <EntitySet Name="ProductAccepts" EntityType="Online_ShoppingDBModel.ProductAccept" />
+          <AssociationSet Name="FK__ProductAc__Categ__5165187F" Association="Online_ShoppingDBModel.FK__ProductAc__Categ__5165187F">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="ProductAccept" EntitySet="ProductAccepts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductAc__Retai__52593CB8" Association="Online_ShoppingDBModel.FK__ProductAc__Retai__52593CB8">
+            <End Role="Retailer" EntitySet="Retailers" />
+            <End Role="ProductAccept" EntitySet="ProductAccepts" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="ProductAccept">
+          <Key>
+            <PropertyRef Name="Prod" />
+          </Key>
+          <Property Name="Prod" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Product_BrandName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Category_Id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Retailer_ID" Type="Int32" />
+          <Property Name="Product_Price" Type="Int32" Nullable="false" />
+          <Property Name="Product_Ouantity" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="Online_ShoppingDBModel.FK__ProductAc__Categ__5165187F" FromRole="ProductAccept" ToRole="Category" />
+          <NavigationProperty Name="Retailer" Relationship="Online_ShoppingDBModel.FK__ProductAc__Retai__52593CB8" FromRole="ProductAccept" ToRole="Retailer" />
+        </EntityType>
+        <Association Name="FK__ProductAc__Categ__5165187F">
+          <End Type="Online_ShoppingDBModel.Category" Role="Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Online_ShoppingDBModel.ProductAccept" Role="ProductAccept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Category_ID" />
+            </Principal>
+            <Dependent Role="ProductAccept">
+              <PropertyRef Name="Category_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductAc__Retai__52593CB8">
+          <End Type="Online_ShoppingDBModel.Retailer" Role="Retailer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Online_ShoppingDBModel.ProductAccept" Role="ProductAccept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Retailer">
+              <PropertyRef Name="Retailer_ID" />
+            </Principal>
+            <Dependent Role="ProductAccept">
+              <PropertyRef Name="Retailer_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -752,6 +855,20 @@
                 <ScalarProperty Name="Product_Image" ColumnName="Product_Image" />
                 <ScalarProperty Name="Product_Desc" ColumnName="Product_Desc" />
                 <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductAccepts">
+            <EntityTypeMapping TypeName="Online_ShoppingDBModel.ProductAccept">
+              <MappingFragment StoreEntitySet="ProductAccept">
+                <ScalarProperty Name="Product_Ouantity" ColumnName="Product_Ouantity" />
+                <ScalarProperty Name="Product_Price" ColumnName="Product_Price" />
+                <ScalarProperty Name="Retailer_ID" ColumnName="Retailer_ID" />
+                <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+                <ScalarProperty Name="Product_Description" ColumnName="Product_Description" />
+                <ScalarProperty Name="Product_Image" ColumnName="Product_Image" />
+                <ScalarProperty Name="Product_BrandName" ColumnName="Product_BrandName" />
+                <ScalarProperty Name="Prod" ColumnName="Prod" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
