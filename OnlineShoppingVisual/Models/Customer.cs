@@ -17,7 +17,6 @@ namespace OnlineShoppingVisual.Models
         public Customer()
         {
             this.Carts = new HashSet<Cart>();
-            this.WishLists = new HashSet<WishList>();
         }
     
         public int Customer_ID { get; set; }
@@ -33,6 +32,5 @@ namespace OnlineShoppingVisual.Models
         public string Customer_Type { get; set; }
     
         public virtual ICollection<Cart> Carts { get; set; }
-        public virtual ICollection<WishList> WishLists { get; set; }
     }
 }

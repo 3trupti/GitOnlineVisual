@@ -33,8 +33,6 @@ namespace OnlineShoppingVisual.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Retailer> Retailers { get; set; }
-        public DbSet<WishList> WishLists { get; set; }
-        public DbSet<WishList_items> WishList_items { get; set; }
         public DbSet<ProductAccept> ProductAccepts { get; set; }
     }
 }

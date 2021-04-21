@@ -13,18 +13,13 @@
         <EntityTypeShape EntityType="Online_ShoppingDBModel.Order" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="Online_ShoppingDBModel.Product" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Online_ShoppingDBModel.Retailer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Online_ShoppingDBModel.WishList" Width="1.5" PointX="3" PointY="9.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Online_ShoppingDBModel.WishList_items" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart__Customer_I__31EC6D26" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart_Deta__Cart___34C8D9D1" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Orders__Cart_Id__45F365D3" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Cart_Deta__Produ__35BCFE0A" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Product__Categor__2E1BDC42" ManuallyRouted="false" />
-        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList__Custom__3F466844" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Orders__Product___46E78A0C" ManuallyRouted="false" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__Product__Retaile__2F10007B" ManuallyRouted="false" />
-        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___Produ__4316F928" ManuallyRouted="false" />
-        <AssociationConnector Association="Online_ShoppingDBModel.FK__WishList___WishL__4222D4EF" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Online_ShoppingDBModel.ProductAccept" Width="1.5" PointX="3" PointY="0.75" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__ProductAc__Categ__5165187F" />
         <AssociationConnector Association="Online_ShoppingDBModel.FK__ProductAc__Retai__52593CB8" />

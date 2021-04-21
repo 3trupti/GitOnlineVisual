@@ -26,15 +26,12 @@ namespace OnlineShoppingVisual.Controllers
         public bool Post([FromBody] Customer cus)
         {
             Cart car = new Cart();
-            WishList Wish = new WishList();
             car.Customer_ID = cus.Customer_ID;
-            Wish.Customer_ID = cus.Customer_ID;
             try
             {
 
                 db.Customers.Add(cus);
                 db.Carts.Add(car);
-                db.WishLists.Add(Wish);
                 var res = db.SaveChanges();
                 if (res > 0)
                     return true;

@@ -119,7 +119,7 @@ namespace OnlineShoppingVisual.Controllers
            return false;
          }*/
 
-        //retrieve product by product it
+        //retrieve product by product id for updation part
         [Route("api/User/GetProductById/{id}")]
 
         [HttpGet]
@@ -590,6 +590,8 @@ namespace OnlineShoppingVisual.Controllers
 
 
         }
+
+
     }
 }
     
